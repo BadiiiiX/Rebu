@@ -1,7 +1,7 @@
 -- Table rides
 CREATE TABLE rides (
     ride_id SERIAL PRIMARY KEY,
-    vehicle_id TEXT NOT NULL,
+    car_id TEXT NOT NULL,
     driver_id INT NOT NULL,
     origin TEXT NOT NULL,
     destination TEXT NOT NULL,
@@ -10,7 +10,7 @@ CREATE TABLE rides (
 
 -- Index pour faciliter les recherches par conducteur, véhicule ou date
 CREATE INDEX idx_rides_driver_id ON rides(driver_id);
-CREATE INDEX idx_rides_vehicle_id ON rides(vehicle_id);
+CREATE INDEX idx_rides_car_id ON rides(car_id);
 CREATE INDEX idx_rides_start_date ON rides(start_date);
 
 -- (Optionnel) si tu fais souvent des recherches par origine/destination

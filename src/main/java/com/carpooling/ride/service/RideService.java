@@ -7,7 +7,7 @@ import main.java.com.carpooling.ride.model.RideInterface;
 
 import java.util.List;
 
-public class RideService extends AbstractService {
+public class RideService extends AbstractService implements RideServiceInterface {
     private final RideDAO rideRepository;
 
     public RideService(RideDAO rideRepository) {
@@ -25,7 +25,7 @@ public class RideService extends AbstractService {
         rideRepository.save(ride);
     }
 
-    public void addPassengerToRide(long rideId, long passengerId) {
+    public void addPassengerToRide(int rideId, int passengerId) {
         if (rideRepository.findById(rideId) == null) {
             throw new IllegalArgumentException("Ride with ID " + rideId + " does not exist");
         }
@@ -37,7 +37,7 @@ public class RideService extends AbstractService {
         rideRepository.addPassenger(rideId, passengerId);
     }
 
-    public void removePassengerFromRide(long rideId, long passengerId) {
+    public void removePassengerFromRide(int rideId, int passengerId) {
         var ride = rideRepository.findById(rideId);
         if (ride == null) {
             throw new IllegalArgumentException("Ride with ID " + rideId + " does not exist");
@@ -52,7 +52,7 @@ public class RideService extends AbstractService {
         rideRepository.removePassenger(rideId, passengerId);
     }
 
-    public void deleteRide(long rideId) {
+    public void deleteRide(int rideId) {
         if (rideRepository.findById(rideId) == null) {
             throw new IllegalArgumentException("Ride with ID " + rideId + " does not exist");
         }
@@ -64,7 +64,7 @@ public class RideService extends AbstractService {
         return rideRepository.findAll();
     }
 
-    public List<RideInterface> getRidesByPassenger(long passengerId) {
+    public List<RideInterface> getRidesByPassenger(int passengerId) {
         return rideRepository.findByPassengerId(passengerId);
     }
 
