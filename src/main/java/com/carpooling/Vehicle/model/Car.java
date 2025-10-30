@@ -15,6 +15,13 @@ public class Car {
         this.licensePlate = licensePlate;
         this.passengersNumber = passengersNumber;
     }
+
+    public Car(Long id, String licensePlate, int passengersNumber) {
+        this.id = id;
+        this.licensePlate = licensePlate;
+        this.passengersNumber = passengersNumber;
+    }
+
     public Long getId() {
         return id;
     }
