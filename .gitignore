@@ -31,7 +31,7 @@ Desktop.ini
 # ===========================
 # Configuration / Environment
 # ===========================
-src/main/java/com/carpooling/config/database.properties
+src/fr/mmp/rebu/config/database.properties
 
 # ===========================
 # Miscellaneous
