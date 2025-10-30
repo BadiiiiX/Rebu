@@ -1,7 +1,7 @@
 -- Table rides
 CREATE TABLE rides (
     ride_id SERIAL PRIMARY KEY,
-    vehicle_id INT NOT NULL,
+    vehicle_id TEXT NOT NULL,
     driver_id INT NOT NULL,
     origin TEXT NOT NULL,
     destination TEXT NOT NULL,

@@ -70,7 +70,7 @@ public class DatabaseConnection {
                 
                 connection = DriverManager.getConnection(URL, properties);
             } catch (ClassNotFoundException e) {
-                throw new SQLException("Driver PostgreSQL non trouvé", e);
+                throw new SQLException("Driver non trouvé", e);
             }
         }
         return connection;
