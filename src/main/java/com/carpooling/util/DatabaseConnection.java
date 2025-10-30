@@ -1,5 +1,7 @@
 package main.java.com.carpooling.util;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -7,14 +9,49 @@ import java.util.Properties;
 
 public class DatabaseConnection {
     
-    private static final String URL = "jdbc:postgresql://localhost:5432/carpooling_db";
-    private static final String USER = "carpooling_user";
-    private static final String PASSWORD = "carpooling_password";
+    private static final String URL;
+    private static final String USER;
+    private static final String PASSWORD;
+    private static final String DRIVER;
+
+    private static final String PROPERTIES_FILE = "database.properties";
     
     private static Connection connection = null;
-    
-    private DatabaseConnection() {
+
+    static {
+        Properties props = new Properties();
+        String urlTemp = null;
+        String userTemp = null;
+        String passwordTemp = null;
+        String driverTemp = null;
+
+        try (InputStream input = DatabaseConnection.class.getClassLoader().getResourceAsStream(PROPERTIES_FILE)) {
+            if (input == null) {
+                throw new IOException("Fichier de configuration introuvable : " + PROPERTIES_FILE);
+            }
+
+            props.load(input);
+
+            urlTemp = props.getProperty("db.url");
+            userTemp = props.getProperty("db.user");
+            passwordTemp = props.getProperty("db.password");
+            driverTemp = props.getProperty("db.driver");
+
+            if (urlTemp == null || userTemp == null || passwordTemp == null || driverTemp == null) {
+                throw new IllegalArgumentException("Paramètres manquants dans " + PROPERTIES_FILE);
+            }
+
+        } catch (IOException e) {
+            System.err.println("Erreur de lecture du fichier " + PROPERTIES_FILE + " : " + e.getMessage());
+        }
+
+        URL = urlTemp;
+        USER = userTemp;
+        PASSWORD = passwordTemp;
+        DRIVER = driverTemp;
     }
+
+    private DatabaseConnection() {}
     
     /**
      * Obtenir une connexion à la base de données
@@ -24,7 +61,7 @@ public class DatabaseConnection {
     public static Connection getConnection() throws SQLException {
         if (connection == null || connection.isClosed()) {
             try {
-                Class.forName("org.postgresql.Driver");
+                Class.forName(DRIVER);
                 
                 Properties properties = new Properties();
                 properties.setProperty("user", USER);
