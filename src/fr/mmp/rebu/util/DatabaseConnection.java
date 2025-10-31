@@ -72,12 +72,12 @@ public class DatabaseConnection {
 
                 System.out.println("Connexion à : " + URL);
                 connection = DriverManager.getConnection(URL, properties);
-                System.out.println("✅ Connexion réussie à la base de données !");
+                System.out.println("Connexion réussie à la base de données !");
 
             } catch (ClassNotFoundException e) {
-                throw new SQLException("❌ Driver non trouvé : " + DRIVER, e);
+                throw new SQLException("Driver non trouvé : " + DRIVER, e);
             } catch (SQLException e) {
-                throw new SQLException("❌ Échec de la connexion à la base : " + URL, e);
+                throw new SQLException("Échec de la connexion à la base : " + URL, e);
             }
         }
         return connection;
