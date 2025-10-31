@@ -22,7 +22,7 @@ public class RideInDatabaseDAO extends AbstractDAO implements RideDAO {
         try {
             this.connection = DatabaseConnection.getConnection();
         } catch (SQLException e) {
-            throw new RuntimeException("Erreur lors de la connexion à la base de données PostgreSQL : " + e.getMessage());
+            throw new RuntimeException("Error connecting to the PostgreSQL database : " + e.getMessage());
         }
     }
 
@@ -41,7 +41,7 @@ public class RideInDatabaseDAO extends AbstractDAO implements RideDAO {
             }
 
         } catch (SQLException e) {
-            System.err.println("Erreur lors du chargement des trajets : " + e.getMessage());
+            System.err.println("Error loading rides : " + e.getMessage());
         }
 
         return rides;
@@ -61,7 +61,7 @@ public class RideInDatabaseDAO extends AbstractDAO implements RideDAO {
             }
 
         } catch (SQLException e) {
-            System.err.println("Erreur lors de la recherche du trajet ID " + id + " : " + e.getMessage());
+            System.err.println("Error searching for ride ID " + id + " : " + e.getMessage());
         }
         return null;
     }
@@ -74,7 +74,7 @@ public class RideInDatabaseDAO extends AbstractDAO implements RideDAO {
             stmt.setInt(2, passengerId);
             stmt.executeUpdate();
         } catch (SQLException e) {
-            System.err.println("Erreur lors de l’ajout d’un passager au trajet : " + e.getMessage());
+            System.err.println("Error adding a passenger to the ride : " + e.getMessage());
         }
     }
 
@@ -101,7 +101,7 @@ public class RideInDatabaseDAO extends AbstractDAO implements RideDAO {
                 }
             }
         } catch (SQLException e) {
-            System.err.println("Erreur lors de l’enregistrement du trajet : " + e.getMessage());
+            System.err.println("Error while creating the ride : " + e.getMessage());
         }
 
         if (newRideId == -1) {
@@ -126,7 +126,7 @@ public class RideInDatabaseDAO extends AbstractDAO implements RideDAO {
             ps2.executeUpdate();
 
         } catch (SQLException e) {
-            System.err.println("Erreur lors de la suppression du trajet ID " + rideId + " : " + e.getMessage());
+            System.err.println("Error deleting ride ID " + rideId + " : " + e.getMessage());
         }
     }
 
@@ -148,7 +148,7 @@ public class RideInDatabaseDAO extends AbstractDAO implements RideDAO {
                 passengers.add(passengerId);
             }
         } catch (SQLException e) {
-            System.err.println("Erreur lors de la recherche des passagers du trajet ID " + rideId + " : " + e.getMessage());
+            System.err.println("Error searching for passengers on ride ID " + rideId + " : " + e.getMessage());
         }
         return passengers;
     }
@@ -186,7 +186,7 @@ public class RideInDatabaseDAO extends AbstractDAO implements RideDAO {
             stmt.setInt(2, passengerId);
             stmt.executeUpdate();
         } catch (SQLException e) {
-            System.err.println("Erreur lors de la suppression du passager du trajet : " + e.getMessage());
+            System.err.println("Error deleting passenger from ride : " + e.getMessage());
         }
     }
 }

@@ -8,8 +8,6 @@ import fr.mmp.rebu.user.model.UserInterface;
 import java.util.Date;
 
 public class RideFactory {
-    private static int TEMPORARY_ID = -1;
-
     public static RideInterface build(int rideId, CarInterface vehicle, UserInterface driver, String origin, String destination, Date startDate) {
         return new Ride(rideId, vehicle, driver, origin, destination, startDate);
     }
