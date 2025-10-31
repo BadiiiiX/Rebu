@@ -7,7 +7,7 @@ import fr.mmp.rebu.ride.mapper.RideMapper;
 import fr.mmp.rebu.ride.model.Ride;
 import fr.mmp.rebu.ride.model.RideInterface;
 import fr.mmp.rebu.user.model.UserInterface;
-import fr.mmp.rebu.util.DatabaseConnection;
+import fr.mmp.rebu.database.DatabaseConnection;
 
 import java.sql.*;
 import java.util.ArrayList;

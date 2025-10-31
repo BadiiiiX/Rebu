@@ -1,6 +1,5 @@
-package fr.mmp.rebu.util;
+package fr.mmp.rebu.database;
 
-import javax.xml.transform.Source;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
@@ -62,7 +61,6 @@ public class DatabaseConnection {
     public static Connection getConnection() throws SQLException {
         if (connection == null || connection.isClosed()) {
             try {
-                System.out.println("Chargement du driver : " + DRIVER);
                 Class.forName(DRIVER);
 
                 Properties properties = new Properties();
@@ -70,10 +68,7 @@ public class DatabaseConnection {
                 properties.setProperty("password", PASSWORD);
                 properties.setProperty("ssl", "false");
 
-                System.out.println("Connexion à : " + URL);
                 connection = DriverManager.getConnection(URL, properties);
-                System.out.println("Connexion réussie à la base de données !");
-
             } catch (ClassNotFoundException e) {
                 throw new SQLException("Driver non trouvé : " + DRIVER, e);
             } catch (SQLException e) {

@@ -1,5 +1,6 @@
 package fr.mmp.rebu;
 
+import fr.mmp.rebu.cli.CliApp;
 import fr.mmp.rebu.domain.AbstractService;
 
 import fr.mmp.rebu.user.model.UserInterface;
@@ -53,5 +54,9 @@ public class Rebu {
 
     public static UserService getUserService() {
         return (UserService) Rebu.getService(UserInterface.class.getSimpleName());
+    }
+
+    public static void start() {
+        CliApp.run();
     }
 }

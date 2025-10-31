@@ -4,7 +4,7 @@ import fr.mmp.rebu.domain.AbstractDAO;
 import fr.mmp.rebu.exception.MappingException;
 import fr.mmp.rebu.user.mapper.UserMapper;
 import fr.mmp.rebu.user.model.UserInterface;
-import fr.mmp.rebu.util.DatabaseConnection;
+import fr.mmp.rebu.database.DatabaseConnection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
