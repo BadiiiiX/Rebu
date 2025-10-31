@@ -20,6 +20,9 @@ public class AuthenticationView {
             return;
         }
 
+
+        CliUtils.success("Vous êtes bien connecté.");
+        CliUtils.info("Actuellement connecté en tant que " + user.getUsername());
         CliApp.setUserLogged(user);
 
         ChooseActionView.choose();
