@@ -6,7 +6,7 @@ import fr.mmp.rebu.ride.model.RideInterface;
 import java.util.List;
 
 public interface RideServiceInterface {
-    void createRide(Ride ride);
+    RideInterface createRide(RideInterface ride);
     void addPassengerToRide(int rideId, int passengerId);
     void removePassengerFromRide(int rideId, int passengerId);
     void deleteRide(int rideId);

@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface RideDAO {
     List<RideInterface> findAll();
-    Ride findById(int rideId);
+    RideInterface findById(int rideId);
     void addPassenger(int rideId, int passengerId);
     int save(RideInterface ride);
     void deleteById(int rideId);

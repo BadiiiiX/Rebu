@@ -3,6 +3,7 @@ package fr.mmp.rebu.ride.dao;
 import fr.mmp.rebu.Rebu;
 import fr.mmp.rebu.car.model.CarInterface;
 import fr.mmp.rebu.domain.AbstractDAO;
+import fr.mmp.rebu.ride.mapper.RideMapper;
 import fr.mmp.rebu.ride.model.Ride;
 import fr.mmp.rebu.ride.model.RideInterface;
 import fr.mmp.rebu.user.model.UserInterface;
@@ -34,17 +35,8 @@ public class RideInDatabaseDAO extends AbstractDAO implements RideDAO {
              ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
-                int rideId = rs.getInt("ride_id");
-                CarInterface vehicle = Rebu.getCarService().findCarByPlate(rs.getString("vehicle_id"));
-                UserInterface driver = Rebu.getUserService().findUserById(rs.getInt("driver_id"));
-                String origin = rs.getString("origin");
-                String destination = rs.getString("destination");
-                Date startDate = new Date(rs.getTimestamp("start_date").getTime());
-
-                Ride ride = new Ride(rideId, vehicle, driver, origin, destination, startDate);
-
-                ride.getPassengers().addAll(findPassengers(rideId));
-
+                RideInterface ride = RideMapper.databaseToRide(rs);
+                ride.getPassengers().addAll(findPassengers(ride.getRideId()));
                 rides.add(ride);
             }
 
@@ -56,21 +48,15 @@ public class RideInDatabaseDAO extends AbstractDAO implements RideDAO {
     }
 
     @Override
-    public Ride findById(int id) {
+    public RideInterface findById(int id) {
         String sql = "SELECT * FROM rides WHERE ride_id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                CarInterface vehicle = Rebu.getCarService().findCarByPlate(rs.getString("car_plate"));
-                UserInterface driver = Rebu.getUserService().findUserById(rs.getInt("driver_id"));
-                String origin = rs.getString("ride_origin");
-                String destination = rs.getString("ride_destination");
-                Date startDate = new Date(rs.getTimestamp("ride_start_date").getTime());
-
-                Ride ride = new Ride(id, vehicle, driver, origin, destination, startDate);
-                ride.getPassengers().addAll(findPassengers(id));
+                RideInterface ride = RideMapper.databaseToRide(rs);
+                ride.getPassengers().addAll(findPassengers(ride.getRideId()));
                 return ride;
             }
 
@@ -84,8 +70,8 @@ public class RideInDatabaseDAO extends AbstractDAO implements RideDAO {
     public void addPassenger(int rideId, int passengerId) {
         String sql = "INSERT INTO ride_passengers (ride_id, passenger_id) VALUES (?, ?) ON CONFLICT DO NOTHING";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setLong(1, rideId);
-            stmt.setLong(2, passengerId);
+            stmt.setInt(1, rideId);
+            stmt.setInt(2, passengerId);
             stmt.executeUpdate();
         } catch (SQLException e) {
             System.err.println("Erreur lors de l’ajout d’un passager au trajet : " + e.getMessage());
@@ -133,10 +119,10 @@ public class RideInDatabaseDAO extends AbstractDAO implements RideDAO {
         try (PreparedStatement ps1 = connection.prepareStatement(deletePassengers);
              PreparedStatement ps2 = connection.prepareStatement(deleteRide)) {
 
-            ps1.setLong(1, rideId);
+            ps1.setInt(1, rideId);
             ps1.executeUpdate();
 
-            ps2.setLong(1, rideId);
+            ps2.setInt(1, rideId);
             ps2.executeUpdate();
 
         } catch (SQLException e) {
@@ -182,14 +168,8 @@ public class RideInDatabaseDAO extends AbstractDAO implements RideDAO {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                int rideId = rs.getInt("ride_id");
-                CarInterface vehicle = Rebu.getCarService().findCarByPlate(rs.getString("car_plate"));
-                UserInterface driver = Rebu.getUserService().findUserById(rs.getInt("driver_id"));
-                String origin = rs.getString("ride_origin");
-                String destination = rs.getString("ride_destination");
-                Date startDate = new Date(rs.getTimestamp("ride_start_date").getTime());
-                Ride ride = new Ride(rideId, vehicle, driver, origin, destination, startDate);
-                ride.getPassengers().addAll(findPassengers(rideId));
+                RideInterface ride = RideMapper.databaseToRide(rs);
+                ride.getPassengers().addAll(findPassengers(ride.getRideId()));
                 rides.add(ride);
             }
         } catch (SQLException e) {
@@ -202,8 +182,8 @@ public class RideInDatabaseDAO extends AbstractDAO implements RideDAO {
     public void removePassenger(int rideId, int passengerId) {
         String sql = "DELETE FROM ride_passengers WHERE ride_id = ? AND passenger_id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setLong(1, rideId);
-            stmt.setLong(2, passengerId);
+            stmt.setInt(1, rideId);
+            stmt.setInt(2, passengerId);
             stmt.executeUpdate();
         } catch (SQLException e) {
             System.err.println("Erreur lors de la suppression du passager du trajet : " + e.getMessage());

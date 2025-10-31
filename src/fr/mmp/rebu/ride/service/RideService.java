@@ -1,11 +1,14 @@
 package fr.mmp.rebu.ride.service;
 
 import fr.mmp.rebu.domain.AbstractService;
+import fr.mmp.rebu.ride.Factory.RideFactory;
 import fr.mmp.rebu.ride.dao.RideDAO;
 import fr.mmp.rebu.ride.model.Ride;
 import fr.mmp.rebu.ride.model.RideInterface;
 
 import java.util.List;
+
+import static fr.mmp.rebu.user.factory.UserFactory.TEMPORARY_ID;
 
 public class RideService extends AbstractService implements RideServiceInterface {
     private final RideDAO rideRepository;
@@ -17,12 +20,18 @@ public class RideService extends AbstractService implements RideServiceInterface
         this.rideRepository = rideRepository;
     }
 
-    public void createRide(Ride ride) {
+    public RideInterface createRide(RideInterface ride) {
+        if (ride.getRideId() != TEMPORARY_ID) {
+            throw new IllegalArgumentException("Cannot add an already existing ride (ID defined)");
+        }
+
         if (rideRepository.findById(ride.getRideId()) != null) {
             throw new IllegalArgumentException("Ride with ID " + ride.getRideId() + " already exists");
         }
 
-        rideRepository.save(ride);
+        var rideId = rideRepository.save(ride);
+
+        return RideFactory.build(rideId, ride);
     }
 
     public void addPassengerToRide(int rideId, int passengerId) {

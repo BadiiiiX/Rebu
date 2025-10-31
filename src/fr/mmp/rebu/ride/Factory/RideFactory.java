@@ -10,11 +10,11 @@ import java.util.Date;
 public class RideFactory {
     private static int TEMPORARY_ID = -1;
 
-    public static RideInterface createRide(int rideId, CarInterface vehicle, UserInterface driver, String origin, String destination, Date startDate) {
+    public static RideInterface build(int rideId, CarInterface vehicle, UserInterface driver, String origin, String destination, Date startDate) {
         return new Ride(rideId, vehicle, driver, origin, destination, startDate);
     }
 
-    public static RideInterface createRide(CarInterface vehicle, UserInterface driver, String origin, String destination, Date startDate) {
-        return new Ride(TEMPORARY_ID, vehicle, driver, origin, destination, startDate);
+    public static RideInterface build(int rideId, RideInterface ride) {
+        return new Ride(rideId, ride.getVehicle(), ride.getDriver(), ride.getOrigin(), ride.getDestination(), ride.getStartDate());
     }
 }
