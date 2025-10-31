@@ -57,11 +57,15 @@ public class CliUtils {
     }
 
     public static int askChoice(String prompt, String... options) {
+        printList(prompt, options);
+        return askIntInRange("Votre choix: ", 1, options.length);
+    }
+
+    public static void printList(String prompt, String... options) {
         System.out.println(prompt);
         for (int i = 0; i < options.length; i++) {
             System.out.println((i + 1) + ". " + options[i]);
         }
-        return askIntInRange("Votre choix: ", 1, options.length);
     }
 
     public static void success(String message) {

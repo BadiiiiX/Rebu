@@ -1,5 +1,6 @@
 package fr.mmp.rebu.shared.view;
 
+import fr.mmp.rebu.car.view.CarView;
 import fr.mmp.rebu.cli.CliUtils;
 
 public class ChooseActionView {
@@ -14,6 +15,7 @@ public class ChooseActionView {
 
         switch (choice) {
             case 1:
+                CarView.choose();
                 break;
             case 2:
                 break;

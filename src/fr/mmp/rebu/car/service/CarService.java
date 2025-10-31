@@ -6,11 +6,11 @@ import java.util.List;
 
 public interface CarService {
 
-    CarInterface createUser(CarInterface car);
+    CarInterface createCar(CarInterface car);
 
-    void updateUser(CarInterface car);
+    void updateCar(CarInterface car);
 
-    void deleteUser(String plate);
+    void deleteCar(String plate);
 
     CarInterface findCarByPlate(String plate);
 

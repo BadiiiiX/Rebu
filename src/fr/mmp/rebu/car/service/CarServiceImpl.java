@@ -15,19 +15,19 @@ public class CarServiceImpl extends AbstractService implements CarService {
     }
 
     @Override
-    public CarInterface createUser(CarInterface car) {
+    public CarInterface createCar(CarInterface car) {
         this.carDAO.save(car);
 
         return car;
     }
 
     @Override
-    public void updateUser(CarInterface car) {
+    public void updateCar(CarInterface car) {
         this.carDAO.save(car);
     }
 
     @Override
-    public void deleteUser(String plate) {
+    public void deleteCar(String plate) {
         this.carDAO.delete(plate);
     }
 

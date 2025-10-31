@@ -38,4 +38,9 @@ public class Car implements CarInterface{
     public UserInterface getOwner() {
         return this.owner;
     }
+
+    @Override
+    public String toString() {
+        return this.plate + " - " + this.passengersNumber;
+    }
 }
