@@ -1,5 +1,7 @@
 package fr.mmp.rebu.cli;
 
+import java.sql.SQLOutput;
+import java.util.Date;
 import java.util.Scanner;
 
 public class CliUtils {
@@ -8,6 +10,21 @@ public class CliUtils {
     public static String askString(String prompt) {
         System.out.print(prompt);
         return scanner.nextLine();
+    }
+
+    public static Date askDate(String prompt) {
+        System.out.print(prompt);
+        Date date = null;
+        while (date == null) {
+            String input = scanner.nextLine();
+            try {
+                date = new Date(Date.parse(input));
+            } catch (IllegalArgumentException e) {
+                System.out.println("❌ Format de date invalide. Veuillez réessayer (ex: Mon Jan 01 00:00:00 GMT 2024).");
+            }
+        }
+
+        return date;
     }
 
     public static int askInt(String prompt) {
@@ -94,5 +111,13 @@ public class CliUtils {
     public static void clearScreen() {
         System.out.print("\033[H\033[2J");
         System.out.flush();
+    }
+
+    public static void print(String prompt) {
+        System.out.println(prompt);
+    }
+
+    public static void printLine() {
+        System.out.println();
     }
 }

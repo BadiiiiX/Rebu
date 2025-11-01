@@ -32,7 +32,7 @@ public class Ride implements RideInterface {
     }
 
     @Override
-    public CarInterface getVehicle() {
+    public CarInterface getCar() {
         return vehicle;
     }
 
@@ -67,5 +67,16 @@ public class Ride implements RideInterface {
     @Override
     public Date getStartDate() {
         return startDate;
+    }
+
+    @Override
+    public String toString() {
+        return "Trajet n°" + rideId +
+                "\nConducteur : " + driver.getUsername() +
+                "\nVéhicule : " + vehicle.getPlate() + " avec " + vehicle.getPassengersNumber() + " places" +
+                "\nDépart : " + origin +
+                "\nDestination : " + destination +
+                "\nDate de départ : " + startDate +
+                "\nPassagers : " + (passengers.isEmpty() ? "Aucun" : passengers.stream().map(UserInterface::getUsername).reduce((a, b) -> a + ", " + b).orElse(""));
     }
 }

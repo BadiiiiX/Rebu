@@ -16,22 +16,12 @@ import java.util.List;
 
 public class RideInDatabaseDAO extends AbstractDAO implements RideDAO {
 
-    private final Connection connection;
-
-    public RideInDatabaseDAO() {
-        try {
-            this.connection = DatabaseConnection.getConnection();
-        } catch (SQLException e) {
-            throw new RuntimeException("Error connecting to the PostgreSQL database : " + e.getMessage());
-        }
-    }
-
     @Override
     public List<RideInterface> findAll() {
         List<RideInterface> rides = new ArrayList<>();
         String sql = "SELECT ride_id, car_plate, driver_id, ride_origin, ride_destination, ride_start_date FROM rides";
 
-        try (Statement stmt = connection.createStatement();
+        try (Connection conn = DatabaseConnection.getConnection(); Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
@@ -50,7 +40,7 @@ public class RideInDatabaseDAO extends AbstractDAO implements RideDAO {
     @Override
     public RideInterface findById(int id) {
         String sql = "SELECT * FROM rides WHERE ride_id = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
 
@@ -69,7 +59,8 @@ public class RideInDatabaseDAO extends AbstractDAO implements RideDAO {
     @Override
     public void addPassenger(int rideId, int passengerId) {
         String sql = "INSERT INTO ride_passengers (ride_id, passenger_id) VALUES (?, ?) ON CONFLICT DO NOTHING";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, rideId);
             stmt.setInt(2, passengerId);
             stmt.executeUpdate();
@@ -80,14 +71,15 @@ public class RideInDatabaseDAO extends AbstractDAO implements RideDAO {
 
     @Override
     public int save(RideInterface ride) {
-        int newRideId = -1;
+        int newRideId;
         String sql = """
                 INSERT INTO rides (car_plate, driver_id, ride_origin, ride_destination, ride_start_date)
                 VALUES (?, ?, ?, ?, ?)
                 RETURNING ride_id
                 """;
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, ride.getVehicle().getPlate());
+
+        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, ride.getCar().getPlate());
             stmt.setInt(2, ride.getDriver().getUserId());
             stmt.setString(3, ride.getOrigin());
             stmt.setString(4, ride.getDestination());
@@ -104,11 +96,7 @@ public class RideInDatabaseDAO extends AbstractDAO implements RideDAO {
             System.err.println("Error while creating the ride : " + e.getMessage());
         }
 
-        if (newRideId == -1) {
-            throw new RuntimeException("Failed to save ride to the database.");
-        }
-
-        return newRideId;
+        return -1;
     }
 
     @Override
@@ -116,8 +104,9 @@ public class RideInDatabaseDAO extends AbstractDAO implements RideDAO {
         String deletePassengers = "DELETE FROM ride_passengers WHERE ride_id = ?";
         String deleteRide = "DELETE FROM rides WHERE ride_id = ?";
 
-        try (PreparedStatement ps1 = connection.prepareStatement(deletePassengers);
-             PreparedStatement ps2 = connection.prepareStatement(deleteRide)) {
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps1 = conn.prepareStatement(deletePassengers);
+             PreparedStatement ps2 = conn.prepareStatement(deleteRide)) {
 
             ps1.setInt(1, rideId);
             ps1.executeUpdate();
@@ -139,7 +128,8 @@ public class RideInDatabaseDAO extends AbstractDAO implements RideDAO {
                 WHERE ride_id = ?
                 """;
 
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, rideId);
             ResultSet rs = stmt.executeQuery();
 
@@ -163,7 +153,8 @@ public class RideInDatabaseDAO extends AbstractDAO implements RideDAO {
                 WHERE rp.passenger_id = ?
                 """;
 
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, passengerId);
             ResultSet rs = stmt.executeQuery();
 
@@ -181,12 +172,36 @@ public class RideInDatabaseDAO extends AbstractDAO implements RideDAO {
     @Override
     public void removePassenger(int rideId, int passengerId) {
         String sql = "DELETE FROM ride_passengers WHERE ride_id = ? AND passenger_id = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, rideId);
             stmt.setInt(2, passengerId);
             stmt.executeUpdate();
         } catch (SQLException e) {
             System.err.println("Error deleting passenger from ride : " + e.getMessage());
         }
+    }
+
+    @Override
+    public List<RideInterface> findByDriverId(int userId) {
+        List<RideInterface> rides = new ArrayList<>();
+        String sql = "SELECT ride_id, car_plate, driver_id, ride_origin, ride_destination, ride_start_date FROM rides WHERE driver_id = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, userId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                RideInterface ride = RideMapper.databaseToRide(rs);
+                ride.getPassengers().addAll(findPassengers(ride.getRideId()));
+                rides.add(ride);
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error loading rides for driver ID " + userId + " : " + e.getMessage());
+        }
+
+        return rides;
     }
 }

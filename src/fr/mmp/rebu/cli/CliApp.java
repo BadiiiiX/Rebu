@@ -6,6 +6,7 @@ import fr.mmp.rebu.user.view.AuthenticationView;
 public class CliApp {
 
     private static UserInterface userLogged;
+    private static boolean isDriver;
 
     public static void run() {
 
@@ -20,7 +21,11 @@ public class CliApp {
         return userLogged;
     }
 
+    public static boolean getIsDriver() { return isDriver; }
+
     public static void setUserLogged(UserInterface userLogged) {
         CliApp.userLogged = userLogged;
     }
+
+    public static void setIsDriver(boolean isDriver) { CliApp.isDriver = isDriver; }
 }

@@ -39,6 +39,7 @@ public class CarView {
 
         car = Rebu.getCarService().createCar(car);
 
+        CliApp.setIsDriver(true);
         CliUtils.success("Voiture créé !");
         CliUtils.pause();
 
