@@ -1,7 +1,7 @@
 package fr.mmp.rebu.ride.mapper;
 
 import fr.mmp.rebu.Rebu;
-import fr.mmp.rebu.ride.Factory.RideFactory;
+import fr.mmp.rebu.ride.factory.RideFactory;
 import fr.mmp.rebu.ride.model.RideInterface;
 
 import java.sql.ResultSet;

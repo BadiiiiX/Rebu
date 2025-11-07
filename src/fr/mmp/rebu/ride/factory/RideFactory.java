@@ -1,4 +1,4 @@
-package fr.mmp.rebu.ride.Factory;
+package fr.mmp.rebu.ride.factory;
 
 import fr.mmp.rebu.car.model.CarInterface;
 import fr.mmp.rebu.ride.model.RideInterface;

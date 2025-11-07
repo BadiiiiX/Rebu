@@ -14,6 +14,7 @@ public interface RideInterface {
     UserInterface getDriver();
     List<UserInterface> getPassengers();
     boolean addPassenger(UserInterface passenger);
+    boolean removePassenger(UserInterface passenger);
     CarInterface getCar();
     String toString();
 }

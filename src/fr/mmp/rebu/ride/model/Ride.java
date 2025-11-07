@@ -55,6 +55,14 @@ public class Ride implements RideInterface {
     }
 
     @Override
+    public boolean removePassenger(UserInterface passenger) {
+        if  (!passengers.contains(passenger)) {
+            return false;
+        }
+        return passengers.remove(passenger);
+    }
+
+    @Override
     public String getOrigin() {
         return origin;
     }

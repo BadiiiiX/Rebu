@@ -1,7 +1,7 @@
 package fr.mmp.rebu.ride.service;
 
 import fr.mmp.rebu.domain.AbstractService;
-import fr.mmp.rebu.ride.Factory.RideFactory;
+import fr.mmp.rebu.ride.factory.RideFactory;
 import fr.mmp.rebu.ride.dao.RideDAO;
 import fr.mmp.rebu.ride.model.RideInterface;
 
@@ -47,12 +47,11 @@ public class RideServiceImpl extends AbstractService implements RideService {
             throw new IllegalArgumentException("Ride with ID " + rideId + " does not exist");
         }
 
-        var passenger = rideRepository.findById(passengerId);
+        var passenger = rideRepository.findPassengerById(passengerId);
         if (passenger == null) {
             throw new IllegalArgumentException("Passenger with ID " + passengerId + " does not exist");
         }
 
-        // Assuming RideRepository has a method to remove a passenger
         rideRepository.removePassenger(rideId, passengerId);
     }
 

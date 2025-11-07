@@ -1,17 +1,14 @@
 package fr.mmp.rebu.ride.dao;
 
 import fr.mmp.rebu.Rebu;
-import fr.mmp.rebu.car.model.CarInterface;
 import fr.mmp.rebu.domain.AbstractDAO;
 import fr.mmp.rebu.ride.mapper.RideMapper;
-import fr.mmp.rebu.ride.model.Ride;
 import fr.mmp.rebu.ride.model.RideInterface;
 import fr.mmp.rebu.user.model.UserInterface;
 import fr.mmp.rebu.database.DatabaseConnection;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class RideInDatabaseDAO extends AbstractDAO implements RideDAO {
@@ -71,7 +68,7 @@ public class RideInDatabaseDAO extends AbstractDAO implements RideDAO {
 
     @Override
     public int save(RideInterface ride) {
-        int newRideId;
+        int newRideId = -1;
         String sql = """
                 INSERT INTO rides (car_plate, driver_id, ride_origin, ride_destination, ride_start_date)
                 VALUES (?, ?, ?, ?, ?)
@@ -96,7 +93,7 @@ public class RideInDatabaseDAO extends AbstractDAO implements RideDAO {
             System.err.println("Error while creating the ride : " + e.getMessage());
         }
 
-        return -1;
+        return newRideId;
     }
 
     @Override
@@ -203,5 +200,23 @@ public class RideInDatabaseDAO extends AbstractDAO implements RideDAO {
         }
 
         return rides;
+    }
+
+    @Override
+    public UserInterface findPassengerById(int passengerId) {
+        String sql = "SELECT passenger_id FROM ride_passengers WHERE passenger_id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, passengerId);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return Rebu.getUserService().findUserById(rs.getInt("passenger_id"));
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error adding a passenger to the ride : " + e.getMessage());
+        }
+        return null;
     }
 }
