@@ -1,8 +1,14 @@
 package fr.mmp.rebu.ride.service;
 
+import fr.mmp.rebu.Rebu;
 import fr.mmp.rebu.domain.AbstractService;
-import fr.mmp.rebu.ride.factory.RideFactory;
 import fr.mmp.rebu.ride.dao.RideDAO;
+import fr.mmp.rebu.ride.dto.RidePassengerEventDto;
+import fr.mmp.rebu.ride.event.components.RideCreatedEvent;
+import fr.mmp.rebu.ride.event.components.RideDeletedEvent;
+import fr.mmp.rebu.ride.event.components.RidePassengerAddedEvent;
+import fr.mmp.rebu.ride.event.components.RidePassengerRemovedEvent;
+import fr.mmp.rebu.ride.factory.RideFactory;
 import fr.mmp.rebu.ride.model.RideInterface;
 
 import java.util.List;
@@ -26,19 +32,33 @@ public class RideServiceImpl extends AbstractService implements RideService {
 
         var rideId = rideRepository.save(ride);
 
-        return RideFactory.build(rideId, ride);
+        var createdRide = RideFactory.build(rideId, ride);
+
+        var createdEvent = new RideCreatedEvent(createdRide);
+        Rebu.getEventDispatcher().fire(createdEvent);
+
+        return createdRide;
     }
 
     public void addPassengerToRide(int rideId, int passengerId) {
-        if (rideRepository.findById(rideId) == null) {
+
+        var ride = rideRepository.findById(rideId);
+
+        if (ride == null) {
             throw new IllegalArgumentException("Ride with ID " + rideId + " does not exist");
         }
 
         if (rideRepository.findById(passengerId) != null) {
             throw new IllegalArgumentException("Passenger with ID " + passengerId + " already exist");
-        }
+        } //TODO : MATTEO => find illogique.
 
         rideRepository.addPassenger(rideId, passengerId);
+
+        var user = Rebu.getUserService().findUserById(passengerId);
+        var passengerAddedDto = new RidePassengerEventDto(ride, user);
+
+        var passengerAddedEvent = new RidePassengerAddedEvent(passengerAddedDto);
+        Rebu.getEventDispatcher().fire(passengerAddedEvent);
     }
 
     public void removePassengerFromRide(int rideId, int passengerId) {
@@ -47,12 +67,16 @@ public class RideServiceImpl extends AbstractService implements RideService {
             throw new IllegalArgumentException("Ride with ID " + rideId + " does not exist");
         }
 
-        var passenger = rideRepository.findPassengerById(passengerId);
+        var passenger = rideRepository.findPassengerById(passengerId); //Todo : Mattéo => find by rideId too ? We can find a ride but not linked with the rideId...
         if (passenger == null) {
             throw new IllegalArgumentException("Passenger with ID " + passengerId + " does not exist");
         }
 
         rideRepository.removePassenger(rideId, passengerId);
+
+        var passengerRemovedDto = new RidePassengerEventDto(ride, passenger);
+        var passengerRemovedEvent = new RidePassengerRemovedEvent(passengerRemovedDto);
+        Rebu.getEventDispatcher().fire(passengerRemovedEvent);
     }
 
     public void deleteRide(int rideId) {
@@ -61,6 +85,9 @@ public class RideServiceImpl extends AbstractService implements RideService {
         }
 
         rideRepository.deleteById(rideId);
+
+        var rideDeletedEvent = new RideDeletedEvent(rideId);
+        Rebu.getEventDispatcher().fire(rideDeletedEvent);
     }
 
     public List<RideInterface> findAll() {

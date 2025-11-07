@@ -43,7 +43,6 @@ public class RidePassengerView {
 
         Rebu.getRideService().deleteRide(ride.getRideId());
 
-        CliUtils.success("Trajet supprimé !");
         CliUtils.pause();
 
         RidePassengerView.choose();

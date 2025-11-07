@@ -43,9 +43,9 @@ public class RideDriverView {
         var startDate = CliUtils.askDate("[RIDE] Quelle est la date de départ de votre trajet ?");
 
         var ride = RideFactory.build(car, CliApp.getUserLogged(), origin, destination, startDate);
-        ride = Rebu.getRideService().createRide(ride);
 
-        CliUtils.success("Trajet créé !");
+        Rebu.getRideService().createRide(ride);
+
         CliUtils.pause();
 
         RideDriverView.choose();
@@ -67,7 +67,6 @@ public class RideDriverView {
 
         Rebu.getRideService().deleteRide(ride.getRideId());
 
-        CliUtils.success("Trajet supprimé !");
         CliUtils.pause();
 
         RideDriverView.choose();

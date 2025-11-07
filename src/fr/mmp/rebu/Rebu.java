@@ -9,6 +9,7 @@ import fr.mmp.rebu.domain.AbstractService;
 import fr.mmp.rebu.event.EventDispatcher;
 import fr.mmp.rebu.event.IEventDispatcher;
 import fr.mmp.rebu.ride.dao.RideInDatabaseDAO;
+import fr.mmp.rebu.ride.event.RideEventListener;
 import fr.mmp.rebu.ride.model.RideInterface;
 import fr.mmp.rebu.ride.service.RideService;
 import fr.mmp.rebu.ride.service.RideServiceImpl;
@@ -38,7 +39,8 @@ public class Rebu {
         Rebu.eventDispatcher = new EventDispatcher();
 
         Rebu.eventDispatcher
-                .register(new UserEventListener());
+                .register(new UserEventListener())
+                .register(new RideEventListener());
 
         services.put(CarInterface.class.getSimpleName(), carService);
         services.put(RideInterface.class.getSimpleName(), rideService);
