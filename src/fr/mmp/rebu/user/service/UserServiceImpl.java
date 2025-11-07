@@ -4,6 +4,7 @@ import fr.mmp.rebu.Rebu;
 import fr.mmp.rebu.car.model.CarInterface;
 import fr.mmp.rebu.domain.AbstractService;
 import fr.mmp.rebu.user.dao.UserDAO;
+import fr.mmp.rebu.user.event.components.*;
 import fr.mmp.rebu.user.factory.UserFactory;
 import fr.mmp.rebu.user.model.UserInterface;
 
@@ -28,7 +29,13 @@ public class UserServiceImpl extends AbstractService implements UserService {
 
         var userId = this.userDAO.save(user);
 
-        return UserFactory.build(userId, user.getEmail(), user.getUsername(), user.getPassword());
+        var createdUser = UserFactory.build(userId, user.getEmail(), user.getUsername(), user.getPassword());
+
+        var createdEvent = new UserCreatedEvent(createdUser);
+
+        Rebu.getEventDispatcher().fire(createdEvent);
+
+        return createdUser;
     }
 
     @Override
@@ -39,6 +46,10 @@ public class UserServiceImpl extends AbstractService implements UserService {
         }
 
         this.userDAO.update(user);
+
+        var updatedEvent = new UserUpdatedEvent(user);
+
+        Rebu.getEventDispatcher().fire(updatedEvent);
     }
 
     @Override
@@ -49,6 +60,10 @@ public class UserServiceImpl extends AbstractService implements UserService {
         }
 
         this.userDAO.delete(userId);
+
+        var deletedEvent = new UserDeletedEvent(userId);
+
+        Rebu.getEventDispatcher().fire(deletedEvent);
     }
 
     @Override
@@ -59,11 +74,28 @@ public class UserServiceImpl extends AbstractService implements UserService {
         if(user == null) {
             user = this.userDAO.findByUsername(login);
             if(user == null) {
+                Rebu.getEventDispatcher().fire(new UserFailedAuthEvent());
                 return null;
             }
         }
 
-        return user.getPassword().equals(password) ? user : null;
+        if (!user.getPassword().equals(password)) {
+            Rebu.getEventDispatcher().fire(new UserFailedAuthEvent());
+            return null;
+        }
+
+        var userLoggedEvent = new UserLoggedEvent(user);
+
+        Rebu.getEventDispatcher().fire(userLoggedEvent);
+
+        return user;
+    }
+
+    @Override
+    public void logoutUser(UserInterface userLogged) {
+        var userLogoutEvent = new UserLogoutEvent(userLogged);
+
+        Rebu.getEventDispatcher().fire(userLogoutEvent);
     }
 
     @Override

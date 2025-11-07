@@ -1,4 +1,4 @@
-package fr.mmp.rebu.shared.view;
+package fr.mmp.rebu.view;
 
 import fr.mmp.rebu.car.view.CarView;
 import fr.mmp.rebu.cli.CliUtils;

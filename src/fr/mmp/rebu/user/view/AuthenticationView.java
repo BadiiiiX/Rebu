@@ -3,7 +3,7 @@ package fr.mmp.rebu.user.view;
 import fr.mmp.rebu.Rebu;
 import fr.mmp.rebu.cli.CliApp;
 import fr.mmp.rebu.cli.CliUtils;
-import fr.mmp.rebu.shared.view.ChooseActionView;
+import fr.mmp.rebu.view.ChooseActionView;
 
 public class AuthenticationView {
 
@@ -15,14 +15,10 @@ public class AuthenticationView {
         var user = Rebu.getUserService().verifyUserAuthentication(login, pass);
 
         if (user == null) {
-            CliUtils.error("Authentication échouée. Vos informations de connexion sont incorrects");
             login();
             return;
         }
 
-
-        CliUtils.success("Vous êtes bien connecté.");
-        CliUtils.info("Actuellement connecté en tant que " + user.getUsername());
         CliApp.setUserLogged(user);
         CliApp.setIsDriver(!Rebu.getCarService().findCarsByOwner(user.getUserId()).isEmpty());
 
@@ -30,9 +26,9 @@ public class AuthenticationView {
     }
 
     public static void logout() {
+        Rebu.getUserService().logoutUser(CliApp.getUserLogged());
         CliApp.setUserLogged(null);
         CliApp.setIsDriver(false);
-        CliUtils.success("Vous êtes bien déconnecté.");
         login();
     }
 

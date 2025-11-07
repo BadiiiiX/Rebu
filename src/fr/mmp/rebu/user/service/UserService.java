@@ -15,6 +15,8 @@ public interface UserService {
 
     UserInterface verifyUserAuthentication(String login, String password);
 
+    void logoutUser(UserInterface userId);
+
     UserInterface findUserById(int userId);
 
     UserInterface findUserByEmail(String email);

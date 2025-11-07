@@ -1,9 +1,8 @@
 package fr.mmp.rebu.ride.view;
 
 import fr.mmp.rebu.Rebu;
-import fr.mmp.rebu.cli.CliApp;
 import fr.mmp.rebu.cli.CliUtils;
-import fr.mmp.rebu.shared.view.ChooseActionView;
+import fr.mmp.rebu.view.ChooseActionView;
 
 public class RideView {
     public static void choose() {
