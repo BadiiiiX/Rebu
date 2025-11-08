@@ -48,9 +48,9 @@ public class RideServiceImpl extends AbstractService implements RideService {
             throw new IllegalArgumentException("Ride with ID " + rideId + " does not exist");
         }
 
-        if (rideRepository.findById(passengerId) != null) {
+        if (rideRepository.findPassengerById(rideId, passengerId) != null) {
             throw new IllegalArgumentException("Passenger with ID " + passengerId + " already exist");
-        } //TODO : MATTEO => find illogique.
+        }
 
         rideRepository.addPassenger(rideId, passengerId);
 
@@ -67,7 +67,7 @@ public class RideServiceImpl extends AbstractService implements RideService {
             throw new IllegalArgumentException("Ride with ID " + rideId + " does not exist");
         }
 
-        var passenger = rideRepository.findPassengerById(passengerId); //Todo : Mattéo => find by rideId too ? We can find a ride but not linked with the rideId...
+        var passenger = rideRepository.findPassengerById(rideId, passengerId);
         if (passenger == null) {
             throw new IllegalArgumentException("Passenger with ID " + passengerId + " does not exist");
         }

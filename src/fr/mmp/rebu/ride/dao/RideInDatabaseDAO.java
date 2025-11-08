@@ -203,11 +203,12 @@ public class RideInDatabaseDAO extends AbstractDAO implements RideDAO {
     }
 
     @Override
-    public UserInterface findPassengerById(int passengerId) {
-        String sql = "SELECT passenger_id FROM ride_passengers WHERE passenger_id = ?";
+    public UserInterface findPassengerById(int rideId, int passengerId) {
+        String sql = "SELECT passenger_id FROM ride_passengers WHERE passenger_id = ? AND ride_id = ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, passengerId);
+            stmt.setInt(2, rideId);
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {

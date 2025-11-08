@@ -16,5 +16,5 @@ public interface RideDAO {
     List<RideInterface> findByPassengerId(int passengerId);
     void removePassenger(int rideId, int passengerId);
     List<RideInterface> findByDriverId(int userId);
-    UserInterface findPassengerById(int passengerId);
+    UserInterface findPassengerById(int rideId, int passengerId);
 }
