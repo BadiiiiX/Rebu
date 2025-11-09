@@ -30,7 +30,7 @@ public class CarServiceImpl extends AbstractService implements CarService {
 
     @Override
     public void updateCar(CarInterface car) {
-        this.carDAO.update(car);
+        car = this.carDAO.update(car);
 
         var updatedEvent = new CarCreatedEvent(car);
 

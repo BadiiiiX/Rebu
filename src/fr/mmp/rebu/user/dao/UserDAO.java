@@ -4,64 +4,65 @@ import fr.mmp.rebu.user.model.UserInterface;
 
 import java.util.List;
 
+/**
+ * Interface définissant les opérations de base pour la gestion des utilisateurs en base de données.
+ */
 public interface UserDAO {
+
     /**
-     * Persists a given user into the database.
+     * Enregistre un nouvel utilisateur dans la base de données.
      *
-     * @param user the user to be saved, represented by an implementation of the UserInterface.
-     *             The user object should include relevant details such as email, username, and password.
-     * @return an integer representing the ID of the saved user, or -1 if the operation fails.
+     * @param user l'utilisateur à enregistrer, implémentant {@link UserInterface}.
+     *             L'objet doit contenir les informations nécessaires comme l'email, le nom d'utilisateur et le mot de passe.
+     * @return l'identifiant de l'utilisateur créé, ou -1 si l'opération échoue.
      */
     int save(UserInterface user);
 
     /**
-     * Updates the information of an existing user in the system.
+     * Met à jour les informations d’un utilisateur existant dans la base.
      *
-     * @param user an implementation of the UserInterface representing the user to be updated.
-     *             The user object should include the necessary updated details such as email,
-     *             username, and password, as well as a valid user ID.
+     * @param user l'utilisateur à mettre à jour, implémentant {@link UserInterface}.
+     *             L'objet doit contenir les informations mises à jour (email, nom d'utilisateur, mot de passe)
+     *             ainsi qu’un identifiant valide.
      */
     void update(UserInterface user);
 
     /**
-     * Deletes a user from the database based on the provided user ID.
+     * Supprime un utilisateur de la base de données.
      *
-     * @param userId the unique ID of the user to be deleted from the system
+     * @param userId l'identifiant unique de l'utilisateur à supprimer
      */
     void delete(int userId);
 
     /**
-     * Retrieves a list of all users stored in the system.
+     * Retourne la liste de tous les utilisateurs enregistrés dans la base.
      *
-     * @return a list of objects implementing the UserInterface, representing all users in the system.
-     *         If no users are found, returns an empty list.
+     * @return une liste d'objets {@link UserInterface} représentant tous les utilisateurs.
+     *         Retourne une liste vide s’il n’y a aucun utilisateur.
      */
     List<UserInterface> findAll();
 
     /**
-     * Retrieves a user from the database based on the provided user ID.
+     * Recherche un utilisateur selon son identifiant.
      *
-     * @param userId the unique ID of the user to be retrieved
-     * @return an implementation of the UserInterface representing the user
-     *         if found, or null if no user with the given ID exists
+     * @param userId l'identifiant unique de l'utilisateur à rechercher
+     * @return l'utilisateur correspondant, ou {@code null} s'il n'existe pas
      */
     UserInterface findById(int userId);
 
     /**
-     * Retrieves a user from the database based on their email address.
+     * Recherche un utilisateur selon son adresse e-mail.
      *
-     * @param mail the email address of the user to be retrieved
-     * @return an implementation of the UserInterface representing the user
-     *         if found, or null if no user with the given email exists
+     * @param mail l'adresse e-mail de l'utilisateur à rechercher
+     * @return l'utilisateur correspondant, ou {@code null} si aucun utilisateur n'est trouvé
      */
     UserInterface findByMail(String mail);
 
     /**
-     * Retrieves a user from the database based on their username.
+     * Recherche un utilisateur selon son nom d'utilisateur.
      *
-     * @param username the username of the user to be retrieved
-     * @return an implementation of the UserInterface representing the user
-     *         if found, or null if no user with the given username exists
+     * @param username le nom d'utilisateur à rechercher
+     * @return l'utilisateur correspondant, ou {@code null} si aucun utilisateur n'est trouvé
      */
     UserInterface findByUsername(String username);
 }

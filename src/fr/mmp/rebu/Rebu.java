@@ -27,6 +27,7 @@ public class Rebu {
     public static Map<String, AbstractService> services = new HashMap<>();
     public static IEventDispatcher eventDispatcher;
 
+    /* Partie avec des classes "instables" (solid) */
     static {
         var carDAO = new CarInDatabaseDAO();
         var carService = new CarServiceImpl(carDAO);
