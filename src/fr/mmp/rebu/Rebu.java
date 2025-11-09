@@ -1,6 +1,7 @@
 package fr.mmp.rebu;
 
 import fr.mmp.rebu.car.dao.CarInDatabaseDAO;
+import fr.mmp.rebu.car.event.CarEventListener;
 import fr.mmp.rebu.car.model.CarInterface;
 import fr.mmp.rebu.car.service.CarService;
 import fr.mmp.rebu.car.service.CarServiceImpl;
@@ -40,7 +41,8 @@ public class Rebu {
 
         Rebu.eventDispatcher
                 .register(new UserEventListener())
-                .register(new RideEventListener());
+                .register(new RideEventListener())
+                .register(new CarEventListener());
 
         services.put(CarInterface.class.getSimpleName(), carService);
         services.put(RideInterface.class.getSimpleName(), rideService);

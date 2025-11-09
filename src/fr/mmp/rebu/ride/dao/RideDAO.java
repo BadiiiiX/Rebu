@@ -1,6 +1,5 @@
 package fr.mmp.rebu.ride.dao;
 
-import fr.mmp.rebu.ride.model.Ride;
 import fr.mmp.rebu.ride.model.RideInterface;
 import fr.mmp.rebu.user.model.UserInterface;
 

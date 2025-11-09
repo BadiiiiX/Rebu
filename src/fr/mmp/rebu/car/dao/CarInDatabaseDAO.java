@@ -3,12 +3,15 @@ package fr.mmp.rebu.car.dao;
 import fr.mmp.rebu.Rebu;
 import fr.mmp.rebu.car.mapper.CarMapper;
 import fr.mmp.rebu.car.model.CarInterface;
+import fr.mmp.rebu.database.DatabaseConnection;
 import fr.mmp.rebu.domain.AbstractDAO;
 import fr.mmp.rebu.exception.MappingException;
 import fr.mmp.rebu.user.model.UserInterface;
-import fr.mmp.rebu.database.DatabaseConnection;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 

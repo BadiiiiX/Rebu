@@ -1,10 +1,10 @@
 package fr.mmp.rebu.user.dao;
 
+import fr.mmp.rebu.database.DatabaseConnection;
 import fr.mmp.rebu.domain.AbstractDAO;
 import fr.mmp.rebu.exception.MappingException;
 import fr.mmp.rebu.user.mapper.UserMapper;
 import fr.mmp.rebu.user.model.UserInterface;
-import fr.mmp.rebu.database.DatabaseConnection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,8 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserInDatabaseDAO extends AbstractDAO implements UserDAO{
-
-    private final String USER_ID_COLUMN_NAME = "user_id";
 
     @Override
     public int save(UserInterface user) {
@@ -50,10 +48,10 @@ public class UserInDatabaseDAO extends AbstractDAO implements UserDAO{
     @Override
     public void update(UserInterface user) {
         final String UPDATE_USER = """
-            UPDATE users
-            SET user_email = ?, user_username = ?, user_password = ?
-            WHERE user_id = ?
-        """;
+                    UPDATE users
+                    SET user_email = ?, user_username = ?, user_password = ?
+                    WHERE user_id = ?
+                """;
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(UPDATE_USER)) {
@@ -98,7 +96,8 @@ public class UserInDatabaseDAO extends AbstractDAO implements UserDAO{
                 try {
                     users.add(UserMapper.databaseToUser(rs));
                 } catch (MappingException me) {
-                    System.out.println("Erreur lors du mapping d'un utilisateur (ID : " + rs.getInt("user_id") + ")");
+                    String USER_ID_COLUMN_NAME = "user_id";
+                    System.out.println("Erreur lors du mapping d'un utilisateur (ID : " + rs.getInt(USER_ID_COLUMN_NAME) + ")");
                 }
             }
 

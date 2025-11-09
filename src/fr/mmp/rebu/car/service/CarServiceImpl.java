@@ -1,6 +1,9 @@
 package fr.mmp.rebu.car.service;
 
+import fr.mmp.rebu.Rebu;
 import fr.mmp.rebu.car.dao.CarDAO;
+import fr.mmp.rebu.car.event.components.CarCreatedEvent;
+import fr.mmp.rebu.car.event.components.CarDeletedEvent;
 import fr.mmp.rebu.car.model.CarInterface;
 import fr.mmp.rebu.domain.AbstractService;
 
@@ -18,17 +21,29 @@ public class CarServiceImpl extends AbstractService implements CarService {
     public CarInterface createCar(CarInterface car) {
         this.carDAO.save(car);
 
+        var createdEvent = new CarCreatedEvent(car);
+
+        Rebu.getEventDispatcher().fire(createdEvent);
+
         return car;
     }
 
     @Override
     public void updateCar(CarInterface car) {
-        this.carDAO.save(car);
+        this.carDAO.update(car);
+
+        var updatedEvent = new CarCreatedEvent(car);
+
+        Rebu.getEventDispatcher().fire(updatedEvent);
     }
 
     @Override
     public void deleteCar(String plate) {
         this.carDAO.delete(plate);
+
+        var deletedEvent = new CarDeletedEvent(plate);
+
+        Rebu.getEventDispatcher().fire(deletedEvent);
     }
 
     @Override

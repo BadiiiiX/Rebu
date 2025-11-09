@@ -4,6 +4,7 @@ import fr.mmp.rebu.Rebu;
 import fr.mmp.rebu.car.factory.CarFactory;
 import fr.mmp.rebu.cli.CliApp;
 import fr.mmp.rebu.cli.CliUtils;
+import fr.mmp.rebu.view.ChooseActionView;
 
 public class CarView {
 
@@ -15,7 +16,8 @@ public class CarView {
         var choice = CliUtils.askChoice("[CAR] Que souhaîtez-vous faire ?",
                 "Ajouter une voiture",
                 "Supprimer une voiture",
-                "Afficher mes voitures");
+                "Afficher mes voitures",
+                "Retour au menu principal");
 
         switch (choice) {
             case 1:
@@ -27,6 +29,9 @@ public class CarView {
             case 3:
                 CarView.show();
                 break;
+            case 4:
+                ChooseActionView.choose();
+                break;
         }
 
     }
@@ -37,10 +42,9 @@ public class CarView {
 
         var car = CarFactory.build(plate, nbOfPlaces, CliApp.getUserLogged());
 
-        car = Rebu.getCarService().createCar(car);
+        Rebu.getCarService().createCar(car);
 
         CliApp.setIsDriver(true);
-        CliUtils.success("Voiture créé !");
         CliUtils.pause();
 
         CarView.choose();
@@ -52,7 +56,6 @@ public class CarView {
         var car = Rebu.getCarService().findCarByPlate(plate);
 
         if(car == null){
-            CliUtils.error("Plaque inexistante, retour au menu...");
             CliUtils.pause();
 
             CarView.choose();
@@ -61,7 +64,6 @@ public class CarView {
         }
 
         Rebu.getCarService().deleteCar(car.getPlate());
-        CliUtils.success("Voiture supprimée !");
         CliUtils.pause();
 
         CarView.choose();

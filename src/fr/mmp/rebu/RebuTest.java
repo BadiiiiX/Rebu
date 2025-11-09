@@ -1,5 +1,6 @@
 package fr.mmp.rebu;
 
+import fr.mmp.rebu.car.test.CarServiceTest;
 import fr.mmp.rebu.ride.test.RideServiceTest;
 import fr.mmp.rebu.test.ITest;
 import fr.mmp.rebu.user.test.UserServiceTest;
@@ -12,7 +13,8 @@ public class RebuTest {
 
         List<ITest> tests = List.of(
                 new UserServiceTest(),
-                new RideServiceTest()
+                new RideServiceTest(),
+                new CarServiceTest()
         );
 
         System.out.println("===== 🚀 DÉMARRAGE DES TESTS =====\n");
